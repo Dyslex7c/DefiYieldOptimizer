@@ -1,0 +1,21 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc = "0.8.27"
+optimizer = true
+optimizer_runs = 200
+
+[profile.default.networks.avalanche]
+url = "https://api.avax.network/ext/bc/C/rpc"
+chain_id = 43114
+
+[profile.default.networks.avalanche_fuji]
+url = "https://api.avax-test.network/ext/bc/C/rpc"
+chain_id = 43113
+
+[etherscan]
+avalanche = { key = "${SNOWTRACE_API_KEY}" }
+avalanche_fuji = { key = "${SNOWTRACE_API_KEY}" }
+
+# See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
