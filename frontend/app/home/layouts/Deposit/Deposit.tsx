@@ -17,8 +17,8 @@ export default function Deposit() {
   return (
     <div className={styles.deposit}>
       <h2 className={styles.title}>
-        <PiggyBank className={styles.icon} />
         Deposit Funds
+        <PiggyBank className={styles.icon} />
       </h2>
       <form onSubmit={handleDeposit} className={styles.depositForm}>
         <div className={styles.inputGroup}>
@@ -43,7 +43,7 @@ export default function Deposit() {
             <option value="">Select an asset</option>
             <option value="ETH">ETH</option>
             <option value="USDC">USDC</option>
-            <option value="DAI">DAI</option>
+            <option value="AVAX">AVAX</option>
           </select>
         </div>
         <button type="submit" className={styles.depositButton}>

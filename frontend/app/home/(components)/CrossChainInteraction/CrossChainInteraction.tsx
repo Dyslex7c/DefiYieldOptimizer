@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { ArrowRightLeft, Loader } from 'lucide-react'
+import axios from 'axios'
 import styles from './CrossChainInteraction.module.scss'
 
 interface Chain {
@@ -28,19 +29,38 @@ export default function CrossChainInteraction() {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Simulating API call
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      setChains([
-        { id: 'avalanche', name: 'Avalanche', icon: '🔺' },
-        { id: 'ethereum', name: 'Ethereum', icon: '💎' },
-        { id: 'binance', name: 'Binance Smart Chain', icon: '🟨' },
-      ])
-      setAssets([
-        { symbol: 'AVAX', name: 'Avalanche', balance: 100 },
-        { symbol: 'ETH', name: 'Ethereum', balance: 5 },
-        { symbol: 'USDC', name: 'USD Coin', balance: 1000 },
-      ])
-      setIsLoading(false)
+      try {
+        // Fetching chain data with icons from CoinGecko
+        const response = await axios.get('https://api.coingecko.com/api/v3/coins/markets', {
+          params: {
+            vs_currency: 'usd',
+            ids: 'avalanche-2,ethereum,binancecoin', // IDs for Avalanche, Ethereum, Binance Coin
+            order: 'market_cap_desc',
+            per_page: 100,
+            page: 1,
+            sparkline: false,
+          },
+        })
+
+        const chainData = response.data.map((coin: any) => ({
+          id: coin.id,
+          name: coin.name,
+          icon: coin.image, // URL to the coin's icon
+        }))
+
+        setChains(chainData)
+
+        // Simulate assets data
+        setAssets([
+          { symbol: 'AVAX', name: 'Avalanche', balance: 100 },
+          { symbol: 'ETH', name: 'Ethereum', balance: 5 },
+          { symbol: 'USDC', name: 'USD Coin', balance: 1000 },
+        ])
+        setIsLoading(false)
+      } catch (error) {
+        console.error('Error fetching data from CoinGecko', error)
+        setIsLoading(false)
+      }
     }
 
     fetchData()
@@ -48,7 +68,6 @@ export default function CrossChainInteraction() {
 
   const handleTransfer = () => {
     if (!sourceChain || !targetChain || !selectedAsset || amount <= 0) return
-    // In a real application, this would call a cross-chain bridge contract
     console.log(`Transferring ${amount} ${selectedAsset.symbol} from ${sourceChain.name} to ${targetChain.name}`)
   }
 
@@ -80,7 +99,7 @@ export default function CrossChainInteraction() {
                   className={`${styles.chainItem} ${sourceChain?.id === chain.id ? styles.selected : ''}`}
                   onClick={() => setSourceChain(chain)}
                 >
-                  <span className={styles.icon}>{chain.icon}</span>
+                  <img src={chain.icon} alt={chain.name} className="h-6 w-6" />
                   <span>{chain.name}</span>
                 </div>
               ))}
@@ -95,7 +114,7 @@ export default function CrossChainInteraction() {
                   className={`${styles.chainItem} ${targetChain?.id === chain.id ? styles.selected : ''}`}
                   onClick={() => setTargetChain(chain)}
                 >
-                  <span className={styles.icon}>{chain.icon}</span>
+                  <img src={chain.icon} alt={chain.name} className="h-6 w-6" />
                   <span>{chain.name}</span>
                 </div>
               ))}
@@ -134,4 +153,3 @@ export default function CrossChainInteraction() {
     </div>
   )
 }
-

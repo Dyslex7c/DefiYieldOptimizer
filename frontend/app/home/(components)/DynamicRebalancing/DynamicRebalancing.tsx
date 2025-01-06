@@ -101,10 +101,10 @@ export default function DynamicRebalancing() {
           disabled={isRebalancing}
         >
           {isRebalancing ? (
-            <>
+            <span>
               <RefreshCw size={20} className={styles.spinIcon} />
               Rebalancing...
-            </>
+            </span>
           ) : (
             'One-Click Rebalance'
           )}

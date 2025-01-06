@@ -35,8 +35,8 @@ export default function Rewards() {
   return (
     <div className={styles.rewards}>
       <h2 className={styles.title}>
-        <Award className={styles.icon} />
         Your Rewards
+        <Award className={styles.icon} />
         <button onClick={fetchRewards} className={styles.refreshButton}>
           <RefreshCw size={20} />
         </button>

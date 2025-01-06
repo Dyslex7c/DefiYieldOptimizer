@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ArrowDownCircle, AlertTriangle } from 'lucide-react'
 import styles from './Withdraw.module.scss'
+import { Input } from '@/components/ui/input'
 
 export default function Withdraw() {
   const [amount, setAmount] = useState('')
@@ -17,8 +18,8 @@ export default function Withdraw() {
   return (
     <div className={styles.withdraw}>
       <h2 className={styles.title}>
-        <ArrowDownCircle className={styles.icon} />
         Withdraw Funds
+        <ArrowDownCircle className={styles.icon} />
       </h2>
       <form onSubmit={handleWithdraw} className={styles.withdrawForm}>
         <div className={styles.inputGroup}>
@@ -43,7 +44,7 @@ export default function Withdraw() {
             <option value="">Select an asset</option>
             <option value="ETH">ETH</option>
             <option value="USDC">USDC</option>
-            <option value="DAI">DAI</option>
+            <option value="AVAX">AVAX</option>
           </select>
         </div>
         <button type="submit" className={styles.withdrawButton}>

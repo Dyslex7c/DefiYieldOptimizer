@@ -22,6 +22,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+      z-index: 1000;
 
       label {
         font-weight: bold;
@@ -32,7 +33,7 @@
         padding: 0.75rem;
         border-radius: 8px;
         border: 1px solid $text-muted;
-        background-color: rgba($background-dark, 0.2);
+        background-color: rgba($background-dark, 0.7);
         color: $text-light;
         font-size: 1rem;
 
