@@ -1,0 +1,98 @@
+.deposit {
+  @extend .component-container;
+  animation: slideUp 0.5s ease-out;
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+
+    .icon {
+      color: $primary-blue;
+    }
+  }
+
+  .depositForm {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .inputGroup {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-weight: bold;
+        color: $text-light;
+      }
+
+      input, select {
+        padding: 0.75rem;
+        border-radius: 8px;
+        border: 1px solid $text-muted;
+        background-color: rgba($background-dark, 0.2);
+        color: $text-light;
+        font-size: 1rem;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-blue;
+          box-shadow: 0 0 0 2px rgba($primary-blue, 0.2);
+        }
+      }
+    }
+
+    .depositButton {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      background-color: $primary-blue;
+      color: $text-light;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+
+      &:hover {
+        background-color: darken($primary-blue, 10%);
+        transform: translateY(-2px);
+      }
+
+      .icon {
+        animation: moveRight 1s infinite alternate;
+      }
+    }
+  }
+
+  .depositInfo {
+    background-color: rgba($background-dark, 0.2);
+    border-radius: 8px;
+    padding: 1.5rem;
+
+    h3 {
+      color: $primary-red;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: $text-muted;
+    }
+  }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes moveRight {
+  from { transform: translateX(0); }
+  to { transform: translateX(5px); }
+}
+

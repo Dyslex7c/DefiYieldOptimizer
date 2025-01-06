@@ -1,0 +1,28 @@
+
+.navigationPanel {
+  display: flex;
+  justify-content: center;
+  background-color: rgba($background-dark, 0.5);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  @extend .animate-fadeIn;
+
+  .navItem {
+    color: $text-light;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: rgba($primary-blue, 0.2);
+    }
+
+    &.active {
+      background-color: $primary-blue;
+      color: $text-light;
+    }
+  }
+}
+

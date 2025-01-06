@@ -1,0 +1,38 @@
+
+.welcomeBanner {
+  background: linear-gradient(135deg, $primary-red, $primary-blue);
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  @extend .animate-fadeIn;
+
+  .greeting {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: $text-light;
+  }
+
+  .portfolioOverview {
+    display: flex;
+    justify-content: space-between;
+    @extend .animate-slideUp;
+
+    .stat {
+      text-align: center;
+
+      .label {
+        display: block;
+        font-size: 0.9rem;
+        color: $text-muted;
+        margin-bottom: 0.5rem;
+      }
+
+      .value {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+    }
+  }
+}
+

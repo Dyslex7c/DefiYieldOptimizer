@@ -1,0 +1,246 @@
+.dynamicRebalancing {
+  background-color: rgba($primary-blue, 0.05);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba($primary-blue, 0.1);
+  position: relative;
+  overflow: hidden;
+  @extend .animate-fadeIn;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba($primary-blue, 0.05) 0%, rgba($primary-blue, 0) 70%);
+    animation: pulse 15s ease-in-out infinite;
+  }
+
+  .title {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: $primary-blue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+
+    .refreshButton {
+      background: none;
+      border: none;
+      color: $primary-red;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: rotate(180deg);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .allocationChart {
+    background-color: rgba($background-dark, 0.05);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+
+    .chartIcon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba($primary-blue, 0.1);
+      z-index: 0;
+    }
+
+    .allocationBar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .protocol {
+        width: 100px;
+        font-weight: bold;
+        color: $text-light;
+      }
+
+      .barContainer {
+        flex-grow: 1;
+        height: 24px;
+        background-color: rgba($background-dark, 0.2);
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+
+        .currentBar, .suggestedBar {
+          height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          transition: width 0.5s ease;
+        }
+
+        .currentBar {
+          background-color: rgba($primary-blue, 0.5);
+          z-index: 1;
+        }
+
+        .suggestedBar {
+          background-color: $primary-blue;
+          z-index: 2;
+          opacity: 0.8;
+        }
+      }
+
+      .percentage {
+        width: 50px;
+        text-align: right;
+        font-weight: bold;
+        color: $primary-red;
+      }
+    }
+  }
+
+  .apyComparison {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    .apyBox {
+      background-color: rgba($background-dark, 0.05);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      flex: 1;
+
+      .label {
+        display: block;
+        font-size: 0.9rem;
+        color: $text-muted;
+        margin-bottom: 0.5rem;
+      }
+
+      .value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: $primary-blue;
+      }
+    }
+
+    .arrow {
+      margin: 0 1.5rem;
+      color: $primary-red;
+    }
+  }
+
+  .rebalanceButton {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    background-color: $primary-blue;
+    color: $text-light;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+      background-color: darken($primary-blue, 10%);
+    }
+
+    &:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba($text-light, 0.2) 0%, rgba($text-light, 0) 70%);
+      transform: scale(0);
+      transition: transform 0.6s ease-out;
+    }
+
+    &:hover::before {
+      transform: scale(1);
+    }
+
+    .spinIcon {
+      animation: spin 1s linear infinite;
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($background-dark, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  z-index: 10;
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid $primary-blue;
+    border-top: 3px solid $primary-red;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: $text-light;
+    font-weight: bold;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.05); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 0.5; }
+}
+

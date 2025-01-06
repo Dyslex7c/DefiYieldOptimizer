@@ -2,6 +2,10 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { SmoothScroll } from './components/SmoothScroll'
+import { cookieToInitialState } from 'wagmi'
+import { getConfig } from './config'
+import { headers } from 'next/headers'
+import { Providers } from './providers'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,10 +19,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const initialState = cookieToInitialState(
+    getConfig(),
+    headers().get("cookie")
+  );
   return (
     <html lang="en" suppressHydrationWarning={true}>
         <body className={inter.className} suppressHydrationWarning={true}>
-          <SmoothScroll>{children}</SmoothScroll>
+          <Providers initialState={initialState}>
+            <SmoothScroll>{children}</SmoothScroll>
+          </Providers>
         </body>
     </html>
   )

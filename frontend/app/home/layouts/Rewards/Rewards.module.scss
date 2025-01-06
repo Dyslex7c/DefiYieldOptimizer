@@ -1,0 +1,144 @@
+.rewards {
+  @extend .component-container;
+  animation: fadeIn 0.5s ease-out;
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+
+    .icon {
+      color: $primary-blue;
+    }
+
+    .refreshButton {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: $primary-red;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid $primary-blue;
+      border-top: 3px solid $primary-red;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+
+  .totalRewards {
+    background-color: rgba($primary-blue, 0.2);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: center;
+
+    h3 {
+      color: $text-light;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-size: 2rem;
+      font-weight: bold;
+      color: $primary-blue;
+    }
+  }
+
+  .rewardsList {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .rewardItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba($background-dark, 0.2);
+      border-radius: 8px;
+      padding: 1rem;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+
+      .assetInfo {
+        display: flex;
+        flex-direction: column;
+
+        .assetName {
+          font-weight: bold;
+          color: $text-light;
+        }
+
+        .assetAmount {
+          color: $text-muted;
+        }
+      }
+
+      .assetValue {
+        font-weight: bold;
+        color: $primary-red;
+      }
+    }
+  }
+
+  .claimButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: $primary-blue;
+    color: $text-light;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+
+    &:hover {
+      background-color: darken($primary-blue, 10%);
+      transform: translateY(-2px);
+    }
+
+    .icon {
+      animation: moveUpRight 1s infinite alternate;
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes moveUpRight {
+  from { transform: translate(0, 0); }
+  to { transform: translate(3px, -3px); }
+}
+

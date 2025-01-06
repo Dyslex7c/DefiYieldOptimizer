@@ -10,14 +10,19 @@ import { Sparkles } from '@/app/components/ui/sparkles'
 import { Button } from '@/app/components/ui/button'
 import { HoverEffect } from '@/app/components/ui/card-hover-effect'
 import { SmoothScroll } from './SmoothScroll'
+import { useAccount, useWriteContract, useReadContract } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 import styles from './LandingPage.module.scss'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useRouter } from 'next/navigation'
 
 gsap.registerPlugin(ScrollTrigger)
 
 export function LandingPage() {
   const [email, setEmail] = useState('')
+  const router = useRouter();
+  const { address, isConnected } = useAccount();
   const featuresRef = useRef(null)
   const howItWorksRef = useRef(null)
   const tokenomicsRef = useRef(null)
@@ -97,6 +102,10 @@ export function LandingPage() {
     },
   ]
 
+  const handleLaunch = () => {
+    router.push("/home");
+  }
+
   return (
     <SmoothScroll>
     <div className={styles.landingPage}>
@@ -110,7 +119,14 @@ export function LandingPage() {
             <li><a href="#tokenomics">Tokenomics</a></li>
           </ul>
         </nav>
-        <Button className={styles.connectButton}>Connect Wallet</Button>
+        <motion.div
+      className="flex flex-col items-center justify-center text-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+    >
+      <ConnectButton />
+    </motion.div>
       </header>
 
       <main>
@@ -121,7 +137,7 @@ export function LandingPage() {
             </h1>
             <p>Maximize your returns with yield farming on Avalanche</p>
           </WavyBackground>
-            <Button>
+            <Button onClick={handleLaunch}>
               Launch App
             </Button>
         </section>
