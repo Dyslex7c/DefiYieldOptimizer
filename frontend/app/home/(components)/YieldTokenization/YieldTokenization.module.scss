@@ -1,12 +1,62 @@
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
 .yieldTokenization {
   @extend .component-container;
+  animation: fadeIn 0.5s ease-out;
+  position: relative;
 
   .title {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    margin-bottom: 2rem;
 
     .icon {
+      color: $primary-red;
+      animation: pulse 2s infinite;
+    }
+  }
+
+  .connectionStatus {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+
+    &.connected {
+      background-color: rgba($primary-blue, 0.2);
+      color: $primary-blue;
+    }
+
+    &.connecting {
+      background-color: rgba($text-muted, 0.2);
+      color: $text-muted;
+    }
+
+    &.disconnected {
+      background-color: rgba($primary-red, 0.2);
       color: $primary-red;
     }
   }
@@ -28,6 +78,7 @@
       padding: 1rem;
       cursor: pointer;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: slideIn 0.3s ease-out;
 
       &:hover {
         transform: translateY(-5px);
@@ -54,6 +105,7 @@
     background-color: rgba($background-dark, 0.2);
     border-radius: 8px;
     padding: 1.5rem;
+    animation: fadeIn 0.5s ease-out;
 
     h3 {
       margin-bottom: 1rem;
@@ -68,6 +120,17 @@
       border: 1px solid $text-muted;
       border-radius: 4px;
       color: $text-light;
+      transition: border-color 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: $primary-blue;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
     }
 
     .actionButtons {
@@ -85,14 +148,15 @@
         border-radius: 8px;
         font-weight: bold;
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.3s ease, transform 0.2s ease;
 
         &:first-child {
           background-color: $primary-blue;
           color: $text-light;
 
-          &:hover {
+          &:hover:not(:disabled) {
             background-color: darken($primary-blue, 10%);
+            transform: scale(1.05);
           }
         }
 
@@ -100,9 +164,16 @@
           background-color: $primary-red;
           color: $text-light;
 
-          &:hover {
+          &:hover:not(:disabled) {
             background-color: darken($primary-red, 10%);
+            transform: scale(1.05);
           }
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+          transform: none;
         }
 
         .icon {
@@ -111,5 +182,63 @@
       }
     }
   }
+
+  .error, .success {
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    animation: fadeIn 0.3s ease-out;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .error {
+    background-color: rgba($primary-red, 0.2);
+    color: $primary-red;
+
+    .icon {
+      color: $primary-red;
+    }
+  }
+
+  .success {
+    background-color: rgba($primary-blue, 0.2);
+    color: $primary-blue;
+  }
+}
+
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($background-dark, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid $text-muted;
+    border-top: 3px solid $primary-blue;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  p {
+    margin-top: 1rem;
+    color: $text-light;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
