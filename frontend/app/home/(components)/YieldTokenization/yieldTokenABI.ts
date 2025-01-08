@@ -336,6 +336,25 @@ const yieldTokenABI = [
         "inputs": [
             {
                 "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "isMinter",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
                 "name": "to",
                 "type": "address"
             },

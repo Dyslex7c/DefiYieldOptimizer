@@ -73,32 +73,32 @@ export function LandingPage() {
     {
       title: 'Dynamic Rebalancing',
       description: 'Automatically move funds across yield farms for optimal returns.',
-      icon: '🔄',
+      icon: '/image1.jpg',
     },
     {
       title: 'Auto-Compounding',
       description: 'Reinvest rewards periodically to maximize your APY.',
-      icon: '📈',
+      icon: '/image2.jpg',
     },
     {
       title: 'Risk Management',
       description: 'Limit allocations to high-risk protocols and offer a "Safe Mode".',
-      icon: '🛡️',
+      icon: '/image1.jpg',
     },
     {
       title: 'Cross-Chain Yield Farming',
       description: 'Access yield farms across multiple blockchains.',
-      icon: '🌉',
+      icon: '/image1.jpg',
     },
     {
       title: 'Governance',
       description: 'Participate in DAO voting for protocol upgrades and strategies.',
-      icon: '🗳️',
+      icon: '/image1.jpg',
     },
     {
       title: 'Social Investing',
       description: 'Follow and mimic top-performing portfolios.',
-      icon: '👥',
+      icon: '/image1.jpg',
     },
   ]
 

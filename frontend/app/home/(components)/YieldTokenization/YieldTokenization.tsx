@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react'
 import { Coins, ArrowRight, RefreshCw, Plus, Minus, AlertCircle } from 'lucide-react'
 import { ethers } from 'ethers'
+import styles from './YieldTokenization.module.scss'
 import yieldTokenizationABI from './yieldTokenizationABI'
 import yieldTokenABI from './yieldTokenABI'
-import styles from './YieldTokenization.module.scss'
 
 interface YieldToken {
   name: string
@@ -14,7 +14,7 @@ interface YieldToken {
   address: string
 }
 
-const contractAddress = '0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8'
+const contractAddress = '0xd007C379A3B37095D0ad259Cd1c5A94c6Dbd8775'
 
 export default function YieldTokenization() {
   const [yieldTokens, setYieldTokens] = useState<YieldToken[]>([])
@@ -56,33 +56,17 @@ export default function YieldTokenization() {
   }, [])
 
   useEffect(() => {
-    const fetchYieldTokens = async (contract: ethers.Contract | null) => {
-      if (contract && account) {
+    const fetchYieldToken = async () => {
+      if (contract) {
         try {
           setIsLoading(true)
-          console.log(contract);
-          
-          const yieldTokenAddress = await contract.yieldToken()
-          console.log(yieldTokenAddress);
+          const yieldTokenAddress = await contract.getYieldTokenAddress()
           const yieldTokenContract = new ethers.Contract(yieldTokenAddress, yieldTokenABI, contract.provider)
           const name = await yieldTokenContract.name()
           const symbol = await yieldTokenContract.symbol()
           const balance = await yieldTokenContract.balanceOf(account)
-          
-          setYieldTokens([
-            {
-              name,
-              symbol,
-              balance: parseFloat(ethers.utils.formatEther(balance)),
-              address: yieldTokenAddress
-            }
-          ])
-          setSelectedToken({
-            name,
-            symbol,
-            balance: parseFloat(ethers.utils.formatEther(balance)),
-            address: yieldTokenAddress
-          })
+          setYieldTokens([{ name, symbol, balance: parseFloat(ethers.utils.formatEther(balance)), address: yieldTokenAddress }])
+          setSelectedToken({ name, symbol, balance: parseFloat(ethers.utils.formatEther(balance)), address: yieldTokenAddress })
         } catch (error) {
           console.error('Failed to fetch yield tokens:', error)
           setError('Failed to fetch yield tokens. Please try again.')
@@ -92,7 +76,7 @@ export default function YieldTokenization() {
       }
     }
 
-    fetchYieldTokens(contract)
+    fetchYieldToken()
   }, [contract, account])
 
   const handleAction = async (action: 'mint' | 'burn') => {
@@ -103,14 +87,11 @@ export default function YieldTokenization() {
 
     try {
       const amount = ethers.utils.parseEther(actionAmount)
-      let tx
       if (action === 'mint') {
-        tx = await contract.requestMint(amount)
+        await contract.mint(account, amount)
       } else {
-        tx = await contract.requestBurn(amount)
+        await contract.burn(account, amount)
       }
-      setSuccessMessage(`Transaction submitted. Waiting for confirmation...`)
-      await tx.wait()
       setSuccessMessage(`Successfully ${action === 'mint' ? 'minted' : 'burned'} ${actionAmount} ${selectedToken.symbol}`)
       
       // Update balance
@@ -124,19 +105,9 @@ export default function YieldTokenization() {
       setSelectedToken(prevToken => 
         prevToken ? {...prevToken, balance: parseFloat(ethers.utils.formatEther(newBalance))} : null
       )
-    } catch (error: any) {
+    } catch (error) {
       console.error(`Failed to ${action} tokens:`, error)
-      if (error.code === 'ACTION_REJECTED') {
-        setError('Transaction rejected by user.')
-      } else if (error.message.includes('InvalidAmount')) {
-        setError('Invalid amount. Please enter a non-zero amount.')
-      } else if (error.message.includes('InsufficientBalance')) {
-        setError('Insufficient balance for this operation.')
-      } else if (error.message.includes('MintFailed') || error.message.includes('BurnFailed')) {
-        setError(`Failed to ${action} tokens. Please try again.`)
-      } else {
-        setError(`An unexpected error occurred. Please try again.`)
-      }
+      setError(`Failed to ${action} tokens. Please try again.`)
     } finally {
       setIsTransacting(false)
     }
@@ -210,4 +181,3 @@ export default function YieldTokenization() {
     </div>
   )
 }
-
