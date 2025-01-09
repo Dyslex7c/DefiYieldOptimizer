@@ -12,9 +12,10 @@ interface YieldToken {
   symbol: string
   balance: number
   address: string
+  type: 'yield' | 'principal'
 }
 
-const contractAddress = '0xd007C379A3B37095D0ad259Cd1c5A94c6Dbd8775'
+const contractAddress = '0xA7d3EBe45dbE275756341841B8f30A0C4FBa1439'
 
 export default function YieldTokenization() {
   const [yieldTokens, setYieldTokens] = useState<YieldToken[]>([])
@@ -27,6 +28,8 @@ export default function YieldTokenization() {
   const [error, setError] = useState<string | null>(null)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
   const [connectionStatus, setConnectionStatus] = useState<'disconnected' | 'connecting' | 'connected'>('disconnected')
+  const [maturityDate, setMaturityDate] = useState<Date | null>(null)
+  const [canRedeem, setCanRedeem] = useState<boolean>(false)
 
   useEffect(() => {
     const initializeEthers = async () => {
@@ -39,8 +42,15 @@ export default function YieldTokenization() {
           const yieldTokenizationContract = new ethers.Contract(contractAddress, yieldTokenizationABI, signer)
           setContract(yieldTokenizationContract)
           const address = await signer.getAddress()
+          console.log(address);
+          
           setAccount(address)
           setConnectionStatus('connected')
+
+          const maturityTimestamp = await yieldTokenizationContract.getMaturityTimestamp()
+          const maturityDate = new Date(maturityTimestamp.toNumber() * 1000)
+          setMaturityDate(maturityDate)
+          setCanRedeem(Date.now() >= maturityDate.getTime())
         } catch (error) {
           console.error('Failed to connect to Ethereum:', error)
           setError('Failed to connect to Ethereum. Please make sure you have MetaMask installed and connected.')
@@ -56,27 +66,50 @@ export default function YieldTokenization() {
   }, [])
 
   useEffect(() => {
-    const fetchYieldToken = async () => {
-      if (contract) {
+    const fetchTokens = async () => {
+      if (contract && account) {
         try {
           setIsLoading(true)
+          // Fetch Yield Token
           const yieldTokenAddress = await contract.getYieldTokenAddress()
           const yieldTokenContract = new ethers.Contract(yieldTokenAddress, yieldTokenABI, contract.provider)
-          const name = await yieldTokenContract.name()
-          const symbol = await yieldTokenContract.symbol()
-          const balance = await yieldTokenContract.balanceOf(account)
-          setYieldTokens([{ name, symbol, balance: parseFloat(ethers.utils.formatEther(balance)), address: yieldTokenAddress }])
-          setSelectedToken({ name, symbol, balance: parseFloat(ethers.utils.formatEther(balance)), address: yieldTokenAddress })
+          const yieldName = await yieldTokenContract.name()
+          const yieldSymbol = await yieldTokenContract.symbol()
+          const yieldBalance = await yieldTokenContract.balanceOf(account)
+
+          // Fetch Principal Token
+          const principalTokenAddress = await contract.getPrincipalTokenAddress()
+          const principalTokenContract = new ethers.Contract(principalTokenAddress, yieldTokenABI, contract.provider)
+          const principalName = await principalTokenContract.name()
+          const principalSymbol = await principalTokenContract.symbol()
+          const principalBalance = await principalTokenContract.balanceOf(account)
+
+          setYieldTokens([
+            {
+              name: yieldName,
+              symbol: yieldSymbol,
+              balance: parseFloat(ethers.utils.formatEther(yieldBalance)),
+              address: yieldTokenAddress,
+              type: 'yield'
+            },
+            {
+              name: principalName,
+              symbol: principalSymbol,
+              balance: parseFloat(ethers.utils.formatEther(principalBalance)),
+              address: principalTokenAddress,
+              type: 'principal'
+            }
+          ])
         } catch (error) {
-          console.error('Failed to fetch yield tokens:', error)
-          setError('Failed to fetch yield tokens. Please try again.')
+          console.error('Failed to fetch tokens:', error)
+          setError('Failed to fetch tokens. Please try again.')
         } finally {
           setIsLoading(false)
         }
       }
     }
 
-    fetchYieldToken()
+    fetchTokens()
   }, [contract, account])
 
   const handleAction = async (action: 'mint' | 'burn') => {
@@ -87,16 +120,26 @@ export default function YieldTokenization() {
 
     try {
       const amount = ethers.utils.parseEther(actionAmount)
+      
       if (action === 'mint') {
-        await contract.mint(account, amount)
+        if (selectedToken.type === 'yield') {
+          await contract.mintYieldTokens(account, amount)
+        } else {
+          await contract.mintPrincipalTokens(account, amount)
+        }
       } else {
-        await contract.burn(account, amount)
+        if (selectedToken.type === 'yield') {
+          await contract.burnYieldTokens(account, amount)
+        } else {
+          await contract.burnPrincipalTokens(account, amount)
+        }
       }
+
       setSuccessMessage(`Successfully ${action === 'mint' ? 'minted' : 'burned'} ${actionAmount} ${selectedToken.symbol}`)
       
       // Update balance
-      const yieldTokenContract = new ethers.Contract(selectedToken.address, yieldTokenABI, contract.provider)
-      const newBalance = await yieldTokenContract.balanceOf(account)
+      const tokenContract = new ethers.Contract(selectedToken.address, yieldTokenABI, contract.provider)
+      const newBalance = await tokenContract.balanceOf(account)
       setYieldTokens(prevTokens => prevTokens.map(token => 
         token.address === selectedToken.address 
           ? {...token, balance: parseFloat(ethers.utils.formatEther(newBalance))} 
