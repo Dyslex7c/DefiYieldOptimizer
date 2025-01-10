@@ -78,7 +78,7 @@ export function LandingPage() {
     {
       title: 'Auto-Compounding',
       description: 'Reinvest rewards periodically to maximize your APY.',
-      icon: '/image2.jpg',
+      icon: '/image1.jpg',
     },
     {
       title: 'Risk Management',
