@@ -6,19 +6,18 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract YieldToken is ERC20, Ownable {
-    // Add error definitions
+abstract contract BaseToken is ERC20, Ownable {
     error InvalidAmount();
     error InsufficientBalance();
     error UnauthorizedMinter();
 
     mapping(address => bool) public authorizedMinters;
 
-    constructor(address initialOwner) 
-        ERC20("Avalanche Yield AVAX", "yAVAX") 
-        Ownable(initialOwner) // Correct initialization of Ownable without passing the owner in constructor.
-    {
-        _transferOwnership(initialOwner); // Explicitly set the owner
+    constructor(
+        string memory name,
+        string memory symbol,
+        address initialOwner
+    ) ERC20(name, symbol) Ownable(initialOwner) {
         authorizedMinters[initialOwner] = true;
     }
 
@@ -28,15 +27,18 @@ contract YieldToken is ERC20, Ownable {
     }
 
     function addMinter(address minter) external onlyOwner {
+        require(minter != address(0), "Invalid minter address");
         authorizedMinters[minter] = true;
     }
 
     function removeMinter(address minter) external onlyOwner {
+        require(minter != address(0), "Invalid minter address");
         authorizedMinters[minter] = false;
     }
 
     function mint(address to, uint256 amount) external onlyAuthorizedMinter {
         if (amount == 0) revert InvalidAmount();
+        require(to != address(0), "Invalid recipient address");
         _mint(to, amount);
     }
 
@@ -45,51 +47,151 @@ contract YieldToken is ERC20, Ownable {
         if (balanceOf(from) < amount) revert InsufficientBalance();
         _burn(from, amount);
     }
+
+    function isMinter(address account) external view returns (bool) {
+        return authorizedMinters[account];
+    }
 }
 
-contract YieldTokenization is Ownable, ReentrancyGuard {
-    YieldToken public yieldToken;
-    
-    // Add error definitions
+// Yield Token Contract
+contract YieldToken is BaseToken {
+    constructor(address initialOwner) 
+        BaseToken("Avalanche Yield AVAX", "yAVAX", initialOwner) 
+    {}
+}
+
+// Principal Token Contract
+contract PrincipalToken is BaseToken {
+    constructor(address initialOwner) 
+        BaseToken("Avalanche Principal AVAX", "pAVAX", initialOwner) 
+    {}
+}
+
+contract YieldTokenization is ReentrancyGuard {
     error InvalidTokenAddress();
     error InvalidAmount();
     error MintFailed();
     error BurnFailed();
+    error NotInitialized();
+    error InvalidMaturity();
+    error InsufficientBalance();
+    error MaturityNotReached();
 
-    event TokensMinted(address indexed to, uint256 amount);
-    event TokensBurned(address indexed from, uint256 amount);
+    YieldToken public immutable yieldToken;
+    PrincipalToken public immutable principalToken;
+    address public immutable owner;
+    uint256 public immutable maturityTimestamp;
 
-    constructor(address _yieldTokenAddress, address initialOwner) 
-        Ownable(initialOwner) // Correct initialization of Ownable without passing the owner in constructor.
-    {
-        if (_yieldTokenAddress == address(0)) revert InvalidTokenAddress();
-        yieldToken = YieldToken(_yieldTokenAddress);
-        _transferOwnership(initialOwner); // Explicitly set the owner
+    event YieldTokensMinted(address indexed to, uint256 amount);
+    event YieldTokensBurned(address indexed from, uint256 amount);
+    event PrincipalTokensMinted(address indexed to, uint256 amount);
+    event PrincipalTokensBurned(address indexed from, uint256 amount);
+    event TokensRedeemed(address indexed from, uint256 amount);
 
-        // Direct mapping initialization in YieldToken constructor
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Not owner");
+        _;
     }
 
-    function requestMint(uint256 amount) external nonReentrant {
+    modifier afterMaturity() {
+        if (block.timestamp < maturityTimestamp) revert MaturityNotReached();
+        _;
+    }
+
+    constructor(uint256 _maturityTimestamp) {
+        if (_maturityTimestamp <= block.timestamp) revert InvalidMaturity();
+        
+        owner = msg.sender;
+        maturityTimestamp = _maturityTimestamp;
+        
+        // Initialize both tokens
+        yieldToken = new YieldToken(address(this));
+        principalToken = new PrincipalToken(address(this));
+        
+        // Add this contract as minter for both tokens
+        yieldToken.addMinter(address(this));
+        principalToken.addMinter(address(this));
+    }
+
+    function mintYieldTokens(address to, uint256 amount) external onlyOwner nonReentrant {
         if (amount == 0) revert InvalidAmount();
         
-        try yieldToken.mint(msg.sender, amount) {
-            emit TokensMinted(msg.sender, amount);
+        try yieldToken.mint(to, amount) {
+            emit YieldTokensMinted(to, amount);
         } catch {
             revert MintFailed();
         }
     }
 
-    function requestBurn(uint256 amount) external nonReentrant {
+    function mintPrincipalTokens(address to, uint256 amount) external onlyOwner nonReentrant {
         if (amount == 0) revert InvalidAmount();
         
-        try yieldToken.burn(msg.sender, amount) {
-            emit TokensBurned(msg.sender, amount);
+        try principalToken.mint(to, amount) {
+            emit PrincipalTokensMinted(to, amount);
+        } catch {
+            revert MintFailed();
+        }
+    }
+
+    function burnYieldTokens(address from, uint256 amount) external onlyOwner nonReentrant {
+        if (amount == 0) revert InvalidAmount();
+        
+        try yieldToken.burn(from, amount) {
+            emit YieldTokensBurned(from, amount);
         } catch {
             revert BurnFailed();
         }
     }
 
-    function recoverMinterRole() external onlyOwner {
-        yieldToken.addMinter(address(this));
+    function burnPrincipalTokens(address from, uint256 amount) external onlyOwner nonReentrant {
+        if (amount == 0) revert InvalidAmount();
+        
+        try principalToken.burn(from, amount) {
+            emit PrincipalTokensBurned(from, amount);
+        } catch {
+            revert BurnFailed();
+        }
+    }
+
+    // Function to mint both yield and principal tokens in equal amounts
+    function mintBothTokens(address to, uint256 amount) external onlyOwner nonReentrant {
+        if (amount == 0) revert InvalidAmount();
+        
+        try yieldToken.mint(to, amount) {
+            emit YieldTokensMinted(to, amount);
+        } catch {
+            revert MintFailed();
+        }
+        
+        try principalToken.mint(to, amount) {
+            emit PrincipalTokensMinted(to, amount);
+        } catch {
+            revert MintFailed();
+        }
+    }
+
+    // Function to redeem principal tokens after maturity
+    function redeemPrincipal(uint256 amount) external afterMaturity nonReentrant {
+        if (amount == 0) revert InvalidAmount();
+        if (principalToken.balanceOf(msg.sender) < amount) revert InsufficientBalance();
+        
+        try principalToken.burn(msg.sender, amount) {
+            emit TokensRedeemed(msg.sender, amount);
+            // Add your redemption logic here (e.g., transfer underlying assets)
+        } catch {
+            revert BurnFailed();
+        }
+    }
+
+    function getYieldTokenAddress() external view returns (address) {
+        return address(yieldToken);
+    }
+
+    function getPrincipalTokenAddress() external view returns (address) {
+        return address(principalToken);
+    }
+
+    function getMaturityTimestamp() external view returns (uint256) {
+        return maturityTimestamp;
     }
 }

@@ -16,7 +16,7 @@ Our DeFi Yield Optimizer addresses these challenges by automating the process of
 
 ### 1. Yield Tokenization:
 
-Upon depositing funds into our DeFi Yield Optimizer, users receive yTokens. These yTokens represent a proportional share of the pooled funds and the accumulated interest. The flexibility of yTokens allows users to transfer, trade, or utilize them within other DeFi applications. This tokenization provides liquidity and ease of access without requiring users to interact directly with the underlying protocols. When users choose to withdraw, their yTokens are burned, and they receive their initial deposit along with any earned yield.
+Upon depositing funds into our DeFi Yield Optimizer, users can mint yTokens. These yTokens represent a proportional share of the pooled funds and the accumulated interest. The flexibility of yTokens allows users to transfer, trade, or utilize them within other DeFi applications. This tokenization provides liquidity and ease of access without requiring users to interact directly with the underlying protocols. When users choose to withdraw, their yTokens are burned, and they receive their initial deposit along with any earned yield.
 
 ### 2. Governance:
 
