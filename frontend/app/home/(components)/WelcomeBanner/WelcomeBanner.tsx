@@ -14,17 +14,17 @@ export default function WelcomeBanner() {
   })
 
   useEffect(() => {
-    // Simulating wallet connection and data fetching
     setTimeout(() => {
-        if (isConnected)
-      setWalletAddress(address)
-      setPortfolioStatus({
-        totalDeposits: 10000,
-        currentAPY: 8.5,
-        earnings: 850
-      })
-    }, 1000)
-  }, [])
+      if (isConnected && address) {
+        setWalletAddress(address);
+        setPortfolioStatus({
+          totalDeposits: 10000,
+          currentAPY: 8.5,
+          earnings: 850
+        });
+      }
+    }, 1000);
+  }, [isConnected, address]);
 
   return (
     <div className={styles.welcomeBanner}>
@@ -50,4 +50,3 @@ export default function WelcomeBanner() {
     </div>
   )
 }
-

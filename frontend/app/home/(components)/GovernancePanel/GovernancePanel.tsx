@@ -63,7 +63,7 @@ export default function GovernancePanel() {
               description: proposal.description,
               votesFor: proposal.votesFor.toNumber(),
               votesAgainst: proposal.votesAgainst.toNumber(),
-              status: ['Active', 'Passed', 'Rejected'][proposal.status]
+              status: ['Active', 'Passed', 'Rejected'][proposal.status] as 'Active' | 'Passed' | 'Rejected'
             })
           }
           setProposals(fetchedProposals)
@@ -120,7 +120,7 @@ export default function GovernancePanel() {
             description: newProposalData.description,
             votesFor: newProposalData.votesFor.toNumber(),
             votesAgainst: newProposalData.votesAgainst.toNumber(),
-            status: ['Active', 'Passed', 'Rejected'][newProposalData.status]
+            status: ['Active', 'Passed', 'Rejected'][newProposalData.status] as 'Active' | 'Passed' | 'Rejected'
           }
         ])
       } catch (error) {

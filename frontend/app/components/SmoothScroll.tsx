@@ -18,18 +18,15 @@ export const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
     lenisRef.current = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smooth: true,
-      mouseMultiplier: 1,
-      smoothTouch: false,
       touchMultiplier: 2,
       infinite: false,
     })
 
     function raf(time: number) {
-      lenisRef.current?.raf(time)
-      requestAnimationFrame(raf)
+      if (lenisRef.current) {
+        lenisRef.current.raf(time)
+        requestAnimationFrame(raf)
+      }
     }
 
     requestAnimationFrame(raf)
@@ -42,10 +39,11 @@ export const SmoothScroll: React.FC<SmoothScrollProps> = ({ children }) => {
 
     return () => {
       lenisRef.current?.destroy()
-      gsap.ticker.remove(lenisRef.current?.raf)
+      gsap.ticker.remove((time) => {
+        lenisRef.current?.raf(time * 1000)
+      })
     }
   }, [])
 
   return <>{children}</>
 }
-

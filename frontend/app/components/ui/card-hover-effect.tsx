@@ -26,8 +26,6 @@ export const HoverEffect = ({
         <CardContainer
           key={item.title}
           className="relative group cursor-pointer"
-          onMouseEnter={() => setHoveredIndex(idx)}
-          onMouseLeave={() => setHoveredIndex(null)}
         >
           <CardBody className="relative z-10 p-8 rounded-xl bg-transparent h-full shadow-lg transition-all duration-300 group-hover:shadow-2xl group-hover:scale-105 border-2 border-cyan-400">
             <CardItem

@@ -14,14 +14,14 @@ export const metadata: Metadata = {
   description: 'Maximize your returns with AI-powered yield farming on Avalanche',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   const initialState = cookieToInitialState(
     getConfig(),
-    headers().get("cookie")
+    (await headers()).get("cookie")
   );
   return (
     <html lang="en" suppressHydrationWarning={true}>
