@@ -1,73 +1,180 @@
-
 .portfolioSummary {
   background-color: rgba($primary-blue, 0.1);
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 2rem;
   margin-bottom: 2rem;
-  @extend .animate-fadeIn;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba($primary-blue, 0.1);
 
   .title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
     color: $primary-blue;
+    font-weight: 700;
+    letter-spacing: 0.5px;
   }
 
   .overviewGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
 
     .overviewItem {
-      background-color: rgba($background-dark, 0.3);
-      border-radius: 8px;
-      padding: 1rem;
-      text-align: center;
+      background-color: rgba($color-background-light, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: left;
+      transition: all 0.3s ease;
+      border: 1px solid rgba($primary-blue, 0.4);
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .icon {
+        color: $primary-blue;
+        margin-bottom: 0.5rem;
+        font-size: 1.5rem;
+      }
 
       .label {
         display: block;
         font-size: 0.9rem;
-        color: $text-muted;
+        color: $color-text-muted;
         margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
       }
 
       .value {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         font-weight: bold;
-        color: $primary-red;
+        color: $color-text-light;
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+
+      .change {
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+
+        &.positive {
+          color: $color-positive;
+        }
+
+        &.negative {
+          color: $color-negative;
+        }
       }
     }
   }
 
   .assetsTable {
-    background-color: rgba($background-dark, 0.3);
-    border-radius: 8px;
-    padding: 1rem;
+    background-color: rgba($color-background-light, 0.05);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba($primary-blue, 0.4);
 
     h3 {
       margin-bottom: 1rem;
       color: $primary-blue;
+      font-size: 1.4rem;
+      font-weight: 600;
     }
 
     table {
       width: 100%;
-      border-collapse: collapse;
+      border-collapse: separate;
+      border-spacing: 0 0.5rem;
 
       th, td {
         text-align: left;
-        padding: 0.5rem;
-        border-bottom: 1px solid rgba($text-muted, 0.3);
+        padding: 1rem;
       }
 
       th {
-        font-weight: bold;
-        color: $text-light;
+        font-weight: 600;
+        color: $color-text-light;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.8rem;
       }
 
       td {
-        color: $text-muted;
+        color: $color-text-muted;
+        background-color: rgba($color-background-light, 0.03);
+        transition: all 0.2s ease;
+
+        &:first-child {
+          border-top-left-radius: 8px;
+          border-bottom-left-radius: 8px;
+        }
+
+        &:last-child {
+          border-top-right-radius: 8px;
+          border-bottom-right-radius: 8px;
+        }
+      }
+
+      tr:hover td {
+        background-color: rgba($color-background-light, 0.08);
+      }
+
+      .assetInfo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        .assetIcon {
+          width: 24px;
+          height: 24px;
+        }
+      }
+
+      .change {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+
+        &.positive {
+          color: $color-positive;
+        }
+
+        &.negative {
+          color: $color-negative;
+        }
       }
     }
   }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 1.2rem;
+  color: $color-text-muted;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.loading {
+  animation: pulse 1.5s infinite ease-in-out;
 }
 

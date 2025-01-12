@@ -3,6 +3,9 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  images: {
+    domains: ['cryptologos.cc'],
+  },
   webpack: (config) => {
     config.externals.push('pino-pretty');
     return config;

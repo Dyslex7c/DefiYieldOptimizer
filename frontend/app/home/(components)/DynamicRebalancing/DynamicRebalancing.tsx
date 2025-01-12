@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import { ArrowRight, BarChart2, RefreshCw } from 'lucide-react'
+import Image from 'next/image'
 import styles from './DynamicRebalancing.module.scss'
 
 interface AllocationData {
   protocol: string
   currentAllocation: number
   suggestedAllocation: number
+  icon: string
 }
 
 export default function DynamicRebalancing() {
@@ -26,10 +28,10 @@ export default function DynamicRebalancing() {
     // Simulating API call
     await new Promise(resolve => setTimeout(resolve, 2000))
     setAllocations([
-      { protocol: 'Aave', currentAllocation: 30, suggestedAllocation: 25 },
-      { protocol: 'Compound', currentAllocation: 20, suggestedAllocation: 30 },
-      { protocol: 'Curve', currentAllocation: 40, suggestedAllocation: 35 },
-      { protocol: 'Yearn', currentAllocation: 10, suggestedAllocation: 10 },
+      { protocol: 'Aave', currentAllocation: 30, suggestedAllocation: 25, icon: 'https://cryptologos.cc/logos/aave-aave-logo.png' },
+      { protocol: 'Compound', currentAllocation: 20, suggestedAllocation: 30, icon: 'https://cryptologos.cc/logos/compound-comp-logo.png' },
+      { protocol: 'Curve', currentAllocation: 40, suggestedAllocation: 35, icon: 'https://cryptologos.cc/logos/curve-dao-token-crv-logo.png' },
+      { protocol: 'Yearn', currentAllocation: 10, suggestedAllocation: 10, icon: 'https://cryptologos.cc/logos/yearn-finance-yfi-logo.png' },
     ])
     setCurrentAPY(7.5)
     setProjectedAPY(8.2)
@@ -69,7 +71,10 @@ export default function DynamicRebalancing() {
           <BarChart2 size={120} className={styles.chartIcon} />
           {allocations.map((allocation, index) => (
             <div key={index} className={styles.allocationBar}>
-              <span className={styles.protocol}>{allocation.protocol}</span>
+              <div className={styles.protocolInfo}>
+                <Image src={allocation.icon} alt={allocation.protocol} width={24} height={24} className={styles.protocolIcon} />
+                <span className={styles.protocol}>{allocation.protocol}</span>
+              </div>
               <div className={styles.barContainer}>
                 <div 
                   className={styles.currentBar} 
@@ -113,4 +118,3 @@ export default function DynamicRebalancing() {
     </div>
   )
 }
-
