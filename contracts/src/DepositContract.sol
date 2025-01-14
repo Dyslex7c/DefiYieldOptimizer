@@ -5,8 +5,8 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@pangolindex/exchange-contracts/contracts/pangolin-core/interfaces/IPangolinPair.sol";
-import "@pangolindex/exchange-contracts/contracts/pangolin-periphery/interfaces/IPangolinRouter.sol";
+import "@pangolindex/contracts/pangolin-core/interfaces/IPangolinPair.sol";
+import "@pangolindex/contracts/pangolin-periphery/interfaces/IPangolinRouter.sol";
 import "@pangolindex/governance/contracts/interfaces/IMiniChef.sol";
 import "./YieldPangolin.sol";
 
