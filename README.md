@@ -2,7 +2,20 @@
 
 ### Yield Tokenization Contract Address Deployed on Avalanche Fuji Testnet: 0xA7d3EBe45dbE275756341841B8f30A0C4FBa1439
 ### Snowtrace URL: https://testnet.snowtrace.io/address/0xA7d3EBe45dbE275756341841B8f30A0C4FBa1439
-### Governance Contract Address Deployed on Avalanche Fuji Testnet: 0x84D8779e6f128879F99Ea26a2829318867c87721
+
+| Contract                  | Address                                    | Snowtrace URL                                                    |
+|---------------------------|--------------------------------------------|------------------------------------------------------------------|
+| Yield Tokenization | 0xA7d3EBe45dbE275756341841B8f30A0C4FBa1439 | [Snowtrace](https://testnet.snowtrace.io/address/0xA7d3EBe45dbE275756341841B8f30A0C4FBa1439) |
+| Governance       | 0x84D8779e6f128879F99Ea26a2829318867c87721 | [Snowtrace](https://testnet.snowtrace.io/address/0x84D8779e6f128879F99Ea26a2829318867c87721) |
+| Deposit          | 0x0747c4BD8F6a46F4E175CCB86d2B8a0D765cbA80 | [Snowtrace](https://testnet.snowtrace.io/address/0x0747c4BD8F6a46F4E175CCB86d2B8a0D765cbA80) |
+
+### Principal AVAX Token Contract Address Deployed on Avalanche Fuji Testnet: 0x7B6653cb11e23e5a315421e6e3D661495310FFf4
+### Snowtrace URL: https://testnet.snowtrace.io/token/0x7B6653cb11e23e5a315421e6e3D661495310FFf4
+
+| Token                  | Address                                    | Snowtrace URL                                                    |
+|---------------------------|--------------------------------------------|------------------------------------------------------------------|
+| pAVAX | 0x7B6653cb11e23e5a315421e6e3D661495310FFf4 | [Snowtrace](https://testnet.snowtrace.io/token/0x7B6653cb11e23e5a315421e6e3D661495310FFf4) |
+| yAVAX | 0xe8937b1Ac2cAfDf7C5C48Ad58C15FAc539468c0f | [Snowtrace](https://testnet.snowtrace.io/token/0xe8937b1Ac2cAfDf7C5C48Ad58C15FAc539468c0f) |
 
 ![alt text](image.png)
 
