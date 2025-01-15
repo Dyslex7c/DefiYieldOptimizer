@@ -1,6 +1,17 @@
 const abi = [
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_wavax",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "initialOwner",
+                "type": "address"
+            }
+        ],
         "stateMutability": "nonpayable",
         "type": "constructor"
     },
@@ -40,12 +51,6 @@ const abi = [
                 "internalType": "uint256",
                 "name": "amount",
                 "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "yieldTokens",
-                "type": "uint256"
             }
         ],
         "name": "Deposited",
@@ -84,55 +89,10 @@ const abi = [
                 "internalType": "uint256",
                 "name": "amount",
                 "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "yieldTokens",
-                "type": "uint256"
             }
         ],
         "name": "Withdrawn",
         "type": "event"
-    },
-    {
-        "inputs": [],
-        "name": "MIN_DEPOSIT",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "PERFORMANCE_FEE",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "WAVAX_ADDRESS",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
     },
     {
         "inputs": [],
@@ -149,19 +109,6 @@ const abi = [
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "getContractBalance",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [
             {
                 "internalType": "address",
@@ -169,22 +116,24 @@ const abi = [
                 "type": "address"
             }
         ],
-        "name": "getUserInfo",
+        "name": "getUserDeposit",
         "outputs": [
             {
-                "internalType": "uint256",
-                "name": "depositAmount",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "yieldTokens",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "lastDepositTime",
-                "type": "uint256"
+                "components": [
+                    {
+                        "internalType": "uint256",
+                        "name": "depositAmount",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "lastDepositTime",
+                        "type": "uint256"
+                    }
+                ],
+                "internalType": "struct SimplePangolinDeposit.UserInfo",
+                "name": "",
+                "type": "tuple"
             }
         ],
         "stateMutability": "view",
@@ -253,13 +202,21 @@ const abi = [
             },
             {
                 "internalType": "uint256",
-                "name": "yieldTokens",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
                 "name": "lastDepositTime",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "wavax",
+        "outputs": [
+            {
+                "internalType": "contract IERC20",
+                "name": "",
+                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -269,26 +226,13 @@ const abi = [
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "yieldTokenAmount",
+                "name": "amount",
                 "type": "uint256"
             }
         ],
         "name": "withdraw",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "yieldToken",
-        "outputs": [
-            {
-                "internalType": "contract YieldToken",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {

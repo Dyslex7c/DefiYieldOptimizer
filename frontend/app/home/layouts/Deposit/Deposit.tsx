@@ -7,7 +7,7 @@ import styles from './Deposit.module.scss'
 import abi from './depositABI'
 
 // Address of the deployed DepositContract
-const depositContractAddress = "0x7E2056f7A8c7d0a88D426a73eD9eF00193157605"
+const depositContractAddress = "0x0747c4BD8F6a46F4E175CCB86d2B8a0D765cbA80"
 
 export default function Deposit() {
   const [amount, setAmount] = useState('')
