@@ -22,8 +22,17 @@ export const TextGenerateEffect = ({ words }: { words: string }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
+      className="text-5xl md:text-7xl font-extrabold tracking-tight"
     >
-      {displayedText}
+      <motion.span className="bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-100">
+        {displayedText}
+      </motion.span>
+      <motion.span
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+        className="inline-block w-1 h-12 md:h-16 bg-gray-300 ml-1"
+      />
     </motion.div>
   );
 };

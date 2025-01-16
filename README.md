@@ -17,7 +17,7 @@
 | pAVAX | 0x7B6653cb11e23e5a315421e6e3D661495310FFf4 | [Snowtrace](https://testnet.snowtrace.io/token/0x7B6653cb11e23e5a315421e6e3D661495310FFf4) |
 | yAVAX | 0xe8937b1Ac2cAfDf7C5C48Ad58C15FAc539468c0f | [Snowtrace](https://testnet.snowtrace.io/token/0xe8937b1Ac2cAfDf7C5C48Ad58C15FAc539468c0f) |
 
-![alt text](image.png)
+![alt text](image-1.png)
 
 Managing decentralized finance (DeFi) investments is becoming increasingly complex as the ecosystem grows. With an ever-expanding array of protocols offering varying yields, users face significant challenges in optimizing returns while minimizing risks. The need for constant monitoring and manual reallocation of funds can be both time-consuming and daunting, particularly for newcomers and even seasoned investors.
 

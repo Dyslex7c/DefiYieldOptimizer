@@ -8,7 +8,7 @@ export const BackgroundBeams = () => {
 
   return (
     <div className="fixed inset-0 overflow-hidden pointer-events-none">
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-red-500 opacity-30" />
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-800 to-black opacity-70" />
       {[...Array(tokenCount)].map((_, index) => (
         <motion.div
           key={index}
