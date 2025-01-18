@@ -64,6 +64,7 @@
   .content {
     display: flex;
     gap: 2rem;
+    flex-wrap: wrap;
   }
 
   .tokenList {
@@ -205,6 +206,110 @@
   .success {
     background-color: rgba($primary-blue, 0.2);
     color: $primary-blue;
+  }
+
+  .grantPermission {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+
+    .grantPermissionButton {
+      background-color: $primary-blue;
+      color: $text-light;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+
+      &:hover {
+        background-color: darken($primary-blue, 10%);
+        transform: scale(1.05);
+      }
+    }
+  }
+
+  .grantPermissionForm {
+    margin-top: 2rem;
+    background-color: rgba($background-dark, 0.2);
+    border-radius: 8px;
+    padding: 1.5rem;
+    animation: fadeIn 0.5s ease-out;
+
+    h3 {
+      margin-bottom: 1rem;
+      color: $primary-blue;
+    }
+
+    .formGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .formGroup {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        color: $text-light;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 0.5rem;
+        background-color: rgba($background-dark, 0.5);
+        border: 1px solid $text-muted;
+        border-radius: 4px;
+        color: $text-light;
+        transition: border-color 0.3s ease;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-blue;
+        }
+      }
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      input[type="checkbox"] {
+        accent-color: $primary-blue;
+      }
+
+      label {
+        color: $text-muted;
+      }
+    }
+
+    .submitButton {
+      margin-top: 1rem;
+      width: 100%;
+      background-color: $primary-blue;
+      color: $text-light;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+
+      &:hover:not(:disabled) {
+        background-color: darken($primary-blue, 10%);
+        transform: scale(1.02);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
   }
 }
 
