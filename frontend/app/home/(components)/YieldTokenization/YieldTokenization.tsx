@@ -175,7 +175,7 @@ export default function YieldTokenization() {
       console.log("Permission granted successfully")
     } catch (error) {
       console.error('Failed to grant permission:', error)
-      throw new Error(`Failed to grant permission: ${error.message}`)
+      throw new Error(`Failed to grant permission: ${error}`)
     }
   }
 

@@ -3,7 +3,10 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpRight, ArrowDownRight, Wallet, DollarSign, TrendingUp } from 'lucide-react'
+import { ethers } from 'ethers'
 import styles from './PortfolioSummary.module.scss'
+import abi from '../../layouts/Deposit/depositABI'
+import { useAccount } from 'wagmi'
 
 interface Asset {
   name: string
@@ -22,44 +25,68 @@ interface PortfolioData {
   assets: Asset[]
 }
 
+const CONTRACT_ADDRESS = '0x0747c4BD8F6a46F4E175CCB86d2B8a0D765cbA80'
+
 export default function PortfolioSummary() {
   const [portfolioData, setPortfolioData] = useState<PortfolioData | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const { address, isConnected } = useAccount()
 
   useEffect(() => {
     const fetchPortfolioData = async () => {
-      // Simulating API call to fetch portfolio data
-      const mockData: Omit<PortfolioData, 'assets'> = {
-        totalValue: 28750.42,
-        totalChange24h: 3.2,
-        dailyYield: 15.75,
-        apy: 9.8,
+      try {
+        // Connect to the Avalanche C-Chain
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const contract = new ethers.Contract(CONTRACT_ADDRESS, abi, provider)
+        
+        // Fetch user's AVAX deposit from the contract
+        const userDeposit = await contract.getUserDeposit(address)
+        const avaxAmount = ethers.utils.formatEther(userDeposit.depositAmount)
+
+        // Fetch AVAX price from CoinGecko
+        const avaxPriceResponse = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=avalanche-2&vs_currencies=usd')
+        const avaxPriceData = await avaxPriceResponse.json()
+        const avaxPrice = avaxPriceData['avalanche-2'].usd
+
+        const avaxValue = parseFloat(avaxAmount) * avaxPrice
+
+        const mockData: Omit<PortfolioData, 'assets'> = {
+          totalValue: avaxValue + 14687.50 + 2767.17, // AVAX + PNG + USDC
+          totalChange24h: 3.2,
+          dailyYield: 15.75,
+          apy: 9.8,
+        }
+
+        // Fetch real-time data for assets including icons
+        const assets = [
+          { id: 'avalanche-2', symbol: 'AVAX', amount: parseFloat(avaxAmount), value: avaxValue, change24h: 4.2 },
+          { id: 'pangolin', symbol: 'PNG', amount: 2500, value: 14687.50, change24h: 3.5 },
+          { id: 'usd-coin', symbol: 'USDC', amount: 2767.17, value: 2767.17, change24h: 0 },
+        ]
+
+        const assetData = await Promise.all(
+          assets.map(async (asset) => {
+            const response = await fetch(`https://api.coingecko.com/api/v3/coins/${asset.id}`)
+            const data = await response.json()
+            return {
+              ...asset,
+              name: data.name,
+              image: data.image.small,
+            }
+          })
+        )
+
+        setPortfolioData({ ...mockData, assets: assetData })
+      } catch (err) {
+        console.error('Error fetching portfolio data:', err)
+        setError('Failed to fetch portfolio data. Please try again later.')
       }
-
-      // Fetch real-time data for assets including icons
-      const assets = [
-        { id: 'avalanche-2', symbol: 'AVAX', amount: 125.5, value: 11295.75, change24h: 4.2 },
-        { id: 'pangolin', symbol: 'PNG', amount: 2500, value: 14687.50, change24h: 3.5 },
-        { id: 'usd-coin', symbol: 'USDC', amount: 2767.17, value: 2767.17, change24h: 0 },
-      ]
-
-      const assetData = await Promise.all(
-        assets.map(async (asset) => {
-          const response = await fetch(`https://api.coingecko.com/api/v3/coins/${asset.id}`)
-          const data = await response.json()
-          return {
-            ...asset,
-            name: data.name,
-            image: data.image.small,
-          }
-        })
-      )
-
-      setPortfolioData({ ...mockData, assets: assetData })
     }
 
     fetchPortfolioData()
   }, [])
 
+  if (error) return <div className={styles.error}>{error}</div>
   if (!portfolioData) return <div className={styles.loading}>Loading...</div>
 
   return (
@@ -112,7 +139,7 @@ export default function PortfolioSummary() {
               >
                 <td>
                   <div className={styles.assetInfo}>
-                    <img src={asset.image} alt={asset.name} className={styles.assetIcon} />
+                    <img src={asset.image || "/placeholder.svg"} alt={asset.name} className={styles.assetIcon} />
                     <span>{asset.name}</span>
                   </div>
                 </td>
