@@ -50,7 +50,7 @@ export default function LandingPage() {
             <RiskManagement />
             <GovernancePanel />
             <YieldTokenization />
-            <CrossChainInteraction />
+            {/* <CrossChainInteraction /> */}
             <Gamification />
           </>
         )

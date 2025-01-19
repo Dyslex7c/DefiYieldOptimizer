@@ -154,29 +154,29 @@ const onPieEnter = (_: any, index: number) => {
     {
       title: "Auto-Compounding",
       description: "Reinvest rewards periodically to maximize your APY.",
-      icon: "/image1.jpg",
+      icon: "/image2.jpg",
     },
     {
       title: "Risk Management",
       description:
         'Limit allocations to high-risk protocols and offer a "Safe Mode".',
-      icon: "/image1.jpg",
+      icon: "/image3.jpg",
     },
     {
       title: "Cross-Chain Yield Farming",
       description: "Access yield farms across multiple blockchains.",
-      icon: "/image1.jpg",
+      icon: "/image4.jpg",
     },
     {
       title: "Governance",
       description:
         "Participate in DAO voting for protocol upgrades and strategies.",
-      icon: "/image1.jpg",
+      icon: "/image5.jpg",
     },
     {
       title: "Social Investing",
       description: "Follow and mimic top-performing portfolios.",
-      icon: "/image1.jpg",
+      icon: "/image6.jpg",
     },
   ];
 
@@ -247,7 +247,7 @@ const onPieEnter = (_: any, index: number) => {
           onClick={handleLaunch}
           size="lg"
           className="text-white font-semibold rounded-full px-8 py-4 text-lg hover:bg-white transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-red-600"
-          style={{background: "linear-gradient(to right, #ffffff, #003cff, #000080, #000000)"}}
+          style={{background: "linear-gradient(to right, #f52222, #0b0f96)"}}
         >
           Launch App
           <ArrowRight className="ml-2 h-5 w-5" />
